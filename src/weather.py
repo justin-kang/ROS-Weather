@@ -27,6 +27,13 @@ for h in range(0,24):
     except IndexError:
         temp_dict[h] = -99
 
+#print temperatures to file "temps.txt"
+file = open("temps.txt", 'w')
+for i in range(0, 24):
+    t = str(temp_dict[i])+'\n'
+    file.write(t)
+
+'''
 #get current time
 current_time = time.localtime()
 current_hour = current_time.tm_hour
@@ -60,3 +67,4 @@ for i in range(0,24):
     t = str(temp_dict[i])+degree
     print("temperature is", t, end='\n')
     counter = counter + 1
+'''
