@@ -24,7 +24,7 @@ parsed_json = json.loads(json_string)
 
 #store temperatures in dictionary
 temp_dict = {}
-for h in range(0,20):
+for h in range(0,12):
     try:
         temp_dict[h] = parsed_json["hourly_forecast"][h]["temp"]["english"]
         print(temp_dict[h])
@@ -37,7 +37,6 @@ port = "/dev/ttyACM0"
 ard = serial.Serial(port, 9600, timeout = 5)
 
 for i in range(0, 20):
-    #ard.flush()
     ard.write(temp_dict[i] + ' ')
     time.sleep(1)
 '''

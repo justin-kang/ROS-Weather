@@ -2,23 +2,23 @@
 
 #define LED_COUNT 60
 
-PololuLedStrip<20> ledStrip;
+PololuLedStrip<12> ledStrip;
 rgb_color colors[LED_COUNT];
 String temp;
-int temps[20];
+int temps[12];
 int count = 0;
 int set = 0;
 
 void setup() {
     Serial.begin(9600);
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 12; i++) {
         temps[i] = 0;
     }
     while (!Serial);
 }
 
 void setTemps() {
-    if (count >= 20)
+    if (count >= 12)
         return;
     while (!Serial.available());
     while (Serial.available() > 0) {
@@ -44,10 +44,12 @@ void loop() {
     if (set == 1)
         return;
     setTemps();
-    for (int i = 0; i < 20; i++) {
-        colors[3*i+0] = (rgb_color){255, 255-temps[i], 0};
-        colors[3*i+1] = (rgb_color){255, 255-temps[i], 0};
-        colors[3*i+2] = (rgb_color){255, 255-temps[i], 0};
+    for (int i = 0; i < 12; i++) {
+        colors[5*i+0] = (rgb_color){255, 255-temps[i], 0};
+        colors[5*i+1] = (rgb_color){255, 255-temps[i], 0};
+        colors[5*i+2] = (rgb_color){255, 255-temps[i], 0};
+        colors[5*i+3] = (rgb_color){255, 255-temps[i], 0};
+        colors[5*i+4] = (rgb_color){255, 255, 255};
     }
     ledStrip.write(colors, LED_COUNT);
     set = 1;
