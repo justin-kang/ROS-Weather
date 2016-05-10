@@ -7,10 +7,12 @@ rgb_color colors[LED_COUNT];
 String temp;
 int temps[12];
 int count = 0;
-int set = 0;
 
+//sets up the initial arduino
 void setup() {
-    Serial.begin(9600);
+    //open serial
+    Serial.begin(115200);
+    //initializes the temps array
     for (int i = 0; i < 12; i++) {
         temps[i] = 0;
     }
@@ -18,15 +20,19 @@ void setup() {
 }
 
 void setTemps() {
+    //all temperatures already received
     if (count >= 12)
         return;
-    while (!Serial.available());
-    while (Serial.available() > 0) {
+    //wait for serial
+    while (!Serial.available()) {}
+    while (Serial.available()) {
         char c = Serial.read();
+        //spaces separate out the temperatures
         if (c == ' ') {
             if (temp.length() != 0) {
-                Serial.print(temp);
+                //converts serial reads to ints
                 double t = (double)temp.toInt();
+                //scales and stores temperatures
                 t = t / 120.0 * 255.0;
                 if (t > 255.0)
                     t = 255.0;
@@ -41,9 +47,9 @@ void setTemps() {
 }
 
 void loop() {
-    if (set == 1)
-        return;
+    //fill in the temps array
     setTemps();
+    //convert from temperatures to colors for the LEDs
     for (int i = 0; i < 12; i++) {
         colors[5*i+0] = (rgb_color){255, 255-temps[i], 0};
         colors[5*i+1] = (rgb_color){255, 255-temps[i], 0};
@@ -51,7 +57,13 @@ void loop() {
         colors[5*i+3] = (rgb_color){255, 255-temps[i], 0};
         colors[5*i+4] = (rgb_color){255, 255, 255};
     }
+    //write out colors to the LEDs
     ledStrip.write(colors, LED_COUNT);
-    set = 1;
-    delay(20);
+    //debugging purposes
+    /*Serial.print("Showing color: ");
+    Serial.print(colors[0].red);
+    Serial.print(",");
+    Serial.print(colors[0].green);
+    Serial.print(",");
+    Serial.println(colors[0].blue);*/
 }
